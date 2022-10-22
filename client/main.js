@@ -25,5 +25,15 @@ class A440 {
   }
 }
 
+const isTouchDevice = () => {
+  return (
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0
+  );
+};
+const listenEvent = isTouchDevice() ? 'touchstart' : 'click';
 const a440 = new A440();
-document.addEventListener('click', () => a440.toggle());
+document.addEventListener(listenEvent, () =>
+  a440.toggle()
+);
