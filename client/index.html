@@ -9,6 +9,11 @@
     crossorigin="anonymous"></script>
   <title>A440</title>
   <style>
+    :root {
+      --button-paused: #f0f0f0;
+      --button-playing: #d4d4d6;
+    }
+
     body {
       height: 100vh;
       display: flex;
@@ -22,13 +27,30 @@
       border: none;
       font-family: 'Caveat', cursive;
       border-radius: 0.5rem;
-      background-color: #f0f0f0;
+      background-color: var("--button-paused");
       cursor: pointer;
       box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2);
     }
 
-    button:active {
-      box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
+    button:hover {
+      background-color: #555;
+    }
+
+    button:focus {
+      outline: none;
+    }
+
+    button[aria-label="Play A440"]::before {
+      content: "🎵";
+      display: inline-block;
+      margin-right: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      button {
+        font-size: 1.5rem;
+        padding: 0.5rem;
+      }
     }
   </style>
 </head>
