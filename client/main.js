@@ -64,7 +64,7 @@ class A440 {
 const a440 = new A440();
 button.addEventListener('click', () => a440.toggle());
 window.addEventListener('blur', () => {
-  if (this.isPlaying) {
+  if (a440.isPlaying) {
     a440.forceStop();
   }
 });
