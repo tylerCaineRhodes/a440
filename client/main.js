@@ -6,6 +6,34 @@ const buttonPlayingStyle = styles.getPropertyValue('--button-playing');
 class A440 {
   constructor() {
     this.isPlaying = false;
+    this.context = null;
+
+    document.addEventListener('visibilitychange', () =>
+      this.#handleVisibilityChange()
+    );
+  }
+  forceStop() {
+    this.#forceStop();
+  }
+  #handleVisibilityChange() {
+    if (document.visibilityState === 'hidden' && this.isPlaying) {
+      this.#forceStop();
+    }
+  }
+  #forceStop() {
+    if (this.oscillator) {
+      this.oscillator.stop();
+      this.oscillator.disconnect();
+      this.oscillator = null;
+    }
+
+    if (this.context) {
+      this.context.close();
+      this.context = null;
+    }
+
+    button.style.backgroundColor = buttonPausedStyle;
+    this.isPlaying = false;
   }
   toggle() {
     this.isPlaying ? this.#pause() : this.#play();
@@ -23,8 +51,7 @@ class A440 {
     this.isPlaying = true;
   }
   #createOscillator() {
-    this.context ||=
-      new window.AudioContext() || new window.webkitAudioContext();
+    this.context = new (window.AudioContext || window.webkitAudioContext)();
 
     const { context } = this;
     const osc = context.createOscillator();
@@ -33,5 +60,11 @@ class A440 {
     return osc;
   }
 }
+
 const a440 = new A440();
 button.addEventListener('click', () => a440.toggle());
+window.addEventListener('blur', () => {
+  if (this.isPlaying) {
+    a440.forceStop();
+  }
+});
